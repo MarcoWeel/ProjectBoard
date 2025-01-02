@@ -13,6 +13,7 @@ namespace ProjectBoard.Model
         public Step() { }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
+        [Key]
         public int Id { get; set; }
         [Required]
         public int Position { get; set; }
@@ -20,5 +21,7 @@ namespace ProjectBoard.Model
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
+        public bool IsCompleted { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

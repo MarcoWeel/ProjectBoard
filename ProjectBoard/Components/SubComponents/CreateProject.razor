@@ -1,0 +1,44 @@
+﻿@using ProjectBoard.Model
+@inject Projects _Projects
+<MudGrid>
+    <MudItem xl="20">
+        <MudPaper Class="pa-4">
+            <MudForm>
+                <MudTextField @bind-Value="name" T="string" Label="Name" Required="true" RequiredError="A name is required!" />
+                <MudTextField @bind-Value="description" T="string" Label="Description" Required="false" AutoGrow="true" Lines="4"/>
+                <MudTextField @bind-Value="customer" T="string" Label="Customer" Text="Marco" />
+                <MudDatePicker Label="DueDate" @bind-Date="dueDate" />
+                <div class="d-flex">
+                    <MudRadioGroup @bind-Value="priority" T="Priority" Required="true" RequiredError="Priority is required!">
+                        <MudRadio Value="@(Priority.Low)">Low</MudRadio>
+                        <MudRadio Value="@(Priority.Medium)">Medium</MudRadio>
+                        <MudRadio Value="@(Priority.High)">High</MudRadio>
+                    </MudRadioGroup>
+                </div>
+                <div class="d-flex align-center justify-space-between">
+                    <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create new project</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    private string name = string.Empty;
+    private string description = string.Empty;
+    private string customer = "Marco";
+    private DateTime? dueDate = null;
+    private Priority priority = Priority.Low;
+
+    private async void Submit()
+    {
+        Project newProject = new Project(name, description, customer, dueDate, priority);
+        await _Projects.CreateProject(newProject);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

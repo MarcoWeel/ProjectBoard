@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using ProjectBoard.Components;
 using ProjectBoard.DataAccess;
 
@@ -17,6 +18,8 @@ builder.Services.AddEntityFrameworkMySql()
     .AddDbContext<ProjectDbContext>(opt => opt.UseMySql(connectionString, serverVersion));
 
 builder.Services.AddScoped<Projects>();
+
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

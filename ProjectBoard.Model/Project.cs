@@ -6,11 +6,21 @@ namespace ProjectBoard.Model
 {
     public class Project
     {
-        public Project()
-        {
+        public Project() { }
 
+        public Project(string name, string description, string customer, DateTime? dueDate, Priority priority)
+        {
+            Name = name;
+            Description = description;
+            Customer = customer;
+            StepList = new List<Step>();
+            IsCompleted = false;
+            DueDate = dueDate;
+            CreationDate = DateTime.Now;
+            Priority = priority;
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         [Required]
         public int Id { get; set; }
         [Required]
@@ -21,8 +31,11 @@ namespace ProjectBoard.Model
         public string Customer { get; set; }
 
         [ForeignKey("StepId")] public List<Step> StepList { get; set; }
-        public DateTime DueDate { get; set; }
+        public bool IsCompleted { get; set; }
+        public DateTime? DueDate { get; set; }
         public DateTime CreationDate { get; set; }
-        public DateTime ModifiedAtDateTime { get; set; }
+        public Priority Priority { get; set; }
     }
+
+    public enum Priority { Low = 0, Medium = 1, High = 2 }
 }

@@ -14,5 +14,11 @@ namespace ProjectBoard.DataAccess
         {
             return await _context.Projects.Include(a => a.StepList).ToListAsync();
         }
+
+        public async Task CreateProject(Project project)
+        {
+            await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }
