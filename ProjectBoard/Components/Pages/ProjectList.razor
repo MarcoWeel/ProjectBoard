@@ -20,7 +20,7 @@
             <CellTemplate>
                 <MudStack Row>
                     @* <MudRating Size="@Size.Small" SelectedValue="@context.Item.Rating" /> *@
-                    <MudButton Size="@Size.Small" OnClick="@GoToDetail" Variant="@Variant.Filled" Color="@Color.Primary">Detail</MudButton>
+                    <MudButton Size="@Size.Small" OnClick="@GoToDetail" Variant="@Variant.Filled" Color="@Color.Primary" href="@($"/ProjectOverview/{context.Item.Id}")">Detail</MudButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>

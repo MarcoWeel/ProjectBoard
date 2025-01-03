@@ -1,0 +1,76 @@
+﻿@page "/ProjectOverview/{ProjectId}"
+@using ProjectBoard.Model
+@using ProjectBoard.Components.SubComponents
+@inject IDialogService DialogService
+
+@inject Projects _projects
+@* @inject Steps _steps *@
+
+<PageTitle>Projects</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+
+
+    <MudPaper Height="75px" Width="100%" Square="true">
+        <MudButton Size="@Size.Small" OnClick="@CreateNewStep" Variant="@Variant.Filled" Color="@Color.Primary">New step</MudButton>
+    </MudPaper>
+
+    <MudPaper Height="75px" Width="100%" Square="true">
+        <MudGrid>
+            <MudItem xs="3">
+                <MudTextField ReadOnly="true" @bind-Value="project.Name" Label="Name" />
+            </MudItem>
+            <MudItem xs="3">
+                <MudTextField ReadOnly="true" @bind-Value="project.Customer" Label="Customer" />
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+    <MudDivider />
+    <MudPaper Height="200px" Width="100%" Square="true">
+        <MudGrid>
+            <MudItem xs="3">
+                <MudTextField ReadOnly="true" @bind-Value="project.Description" Label="Description" Lines="4" />
+            </MudItem>
+            <MudItem xs="3">
+                <MudTextField ReadOnly="true" @bind-Value="project.DueDate" Label="DueDate" />
+                <MudTextField ReadOnly="true" @bind-Value="project.Priority" Label="Priority" />
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>
+@code {
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    private Project? project;
+    private int currentCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        project = await _projects.GetProjectById(Convert.ToInt32(ProjectId));
+    }
+
+    private async Task CreateNewStep()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = false, BackdropClick = false, CloseButton = true };
+
+        var dialog = await DialogService.ShowAsync<CreateProject>("Create new project", options);
+        var result = await dialog.Result;
+
+        // if (!result.Canceled)
+        // {
+        //     project = await _projects.GetAllProjects();
+        // }
+    }
+
+    // private async void GoToDetail()
+    // {
+
+    //         project.Add(new Project
+    //         {
+    //             Name = "TEST"
+    //         });
+
+    // }
+}

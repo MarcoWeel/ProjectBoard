@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore;
 using ProjectBoard.Model;
 
 namespace ProjectBoard.DataAccess
@@ -19,6 +20,11 @@ namespace ProjectBoard.DataAccess
         {
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Project?> GetProjectById(int projectId)
+        {
+            return await _context.Projects.FindAsync(projectId);
         }
     }
 }
