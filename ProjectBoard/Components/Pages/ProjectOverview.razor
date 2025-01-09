@@ -37,6 +37,25 @@
             </MudItem>
         </MudGrid>
     </MudPaper>
+
+    <MudPaper>
+        <MudDataGrid Items="@project.StepList" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <Columns>
+                <PropertyColumn Property="x => x.Position" />
+                <PropertyColumn Property="x => x.Name" />
+                <PropertyColumn Property="x => x.Description" />
+                <PropertyColumn Property="x => x.DueDate" Title="Due date" />
+                <PropertyColumn Property="x => x.IsCompleted" Title="Creation date" />
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudStack Row>
+                            @* <MudButton Size="@Size.Small" OnClick="@GoToDetail" Variant="@Variant.Filled" Color="@Color.Primary" href="@($"/ProjectOverview/{context.Item.Id}")">Detail</MudButton> *@
+                        </MudStack>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudPaper>
 </MudContainer>
 @code {
 
@@ -53,9 +72,16 @@
 
     private async Task CreateNewStep()
     {
+        var parameters = new DialogParameters<CreateStep>
+        {
+            { x => x.projectId, Convert.ToInt32(ProjectId)},
+        };
+
+        //var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
         var options = new DialogOptions { CloseOnEscapeKey = false, BackdropClick = false, CloseButton = true };
 
-        var dialog = await DialogService.ShowAsync<CreateProject>("Create new project", options);
+        var dialog = await DialogService.ShowAsync<CreateStep>("Create new step", parameters, options);
         var result = await dialog.Result;
 
         // if (!result.Canceled)

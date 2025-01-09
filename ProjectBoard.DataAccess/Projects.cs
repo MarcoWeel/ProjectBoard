@@ -26,5 +26,15 @@ namespace ProjectBoard.DataAccess
         {
             return await _context.Projects.FindAsync(projectId);
         }
+
+        public async Task AddStepToProject(Step step, int projectId)
+        {
+            var project = await GetProjectById(projectId);
+            var position = project.StepList.Select(x => x.Position).Max();
+            step.Position = position;
+
+            _context.Projects.Update(project);
+            await _context.SaveChangesAsync();
+        }
     }
 }

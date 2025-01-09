@@ -11,6 +11,14 @@ namespace ProjectBoard.Model
     public class Step
     {
         public Step() { }
+
+        public Step(string name, string description, DateTime? dueDate)
+        {
+            Name = name;
+            Description = description;
+            DueDate = dueDate;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         [Key]

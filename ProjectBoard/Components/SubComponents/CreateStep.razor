@@ -1,0 +1,37 @@
+﻿@using ProjectBoard.Model
+@inject Projects _Projects
+<MudGrid>
+    <MudItem xl="20">
+        <MudPaper Class="pa-4">
+            <MudForm>
+                <MudTextField @bind-Value="name" T="string" Label="Name" Required="true" RequiredError="A name is required!" />
+                <MudTextField @bind-Value="description" T="string" Label="Description" Required="false" AutoGrow="true" Lines="4"/>
+                <MudDatePicker Label="DueDate" @bind-Date="dueDate" />
+                <div class="d-flex align-center justify-space-between">
+                    <MudButton OnClick="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Create new project</MudButton>
+                </div>
+            </MudForm>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public int projectId { get; set; }
+
+    private string name = string.Empty;
+    private string description = string.Empty;
+    private DateTime? dueDate = null;
+
+    private async void Submit()
+    {
+        Step step = new Step(name, description, dueDate);
+        await _Projects.AddStepToProject(step, projectId);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}
