@@ -15,6 +15,7 @@ namespace ProjectBoard.Model
             Customer = customer;
             StepList = new List<Step>();
             IsCompleted = false;
+            IsActive = false;
             DueDate = dueDate;
             CreationDate = DateTime.Now;
             Priority = priority;
@@ -32,6 +33,7 @@ namespace ProjectBoard.Model
 
         [ForeignKey("StepId")] public List<Step> StepList { get; set; }
         public bool IsCompleted { get; set; }
+        public bool IsActive { get; set; }
         public DateTime? DueDate { get; set; }
         public DateTime CreationDate { get; set; }
         public Priority Priority { get; set; }

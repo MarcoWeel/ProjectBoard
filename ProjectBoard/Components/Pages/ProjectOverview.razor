@@ -18,10 +18,10 @@
     <MudPaper Height="75px" Width="100%" Square="true">
         <MudGrid>
             <MudItem xs="3">
-                <MudTextField ReadOnly="true" @bind-Value="project.Name" Label="Name" />
+                <MudTextField ReadOnly="true" @bind-Value="_project.Name" Label="Name" />
             </MudItem>
             <MudItem xs="3">
-                <MudTextField ReadOnly="true" @bind-Value="project.Customer" Label="Customer" />
+                <MudTextField ReadOnly="true" @bind-Value="_project.Customer" Label="Customer" />
             </MudItem>
         </MudGrid>
     </MudPaper>
@@ -29,23 +29,23 @@
     <MudPaper Height="200px" Width="100%" Square="true">
         <MudGrid>
             <MudItem xs="3">
-                <MudTextField ReadOnly="true" @bind-Value="project.Description" Label="Description" Lines="4" />
+                <MudTextField ReadOnly="true" @bind-Value="_project.Description" Label="Description" Lines="4" />
             </MudItem>
             <MudItem xs="3">
-                <MudTextField ReadOnly="true" @bind-Value="project.DueDate" Label="DueDate" />
-                <MudTextField ReadOnly="true" @bind-Value="project.Priority" Label="Priority" />
+                <MudTextField ReadOnly="true" @bind-Value="_project.DueDate" Label="DueDate" />
+                <MudTextField ReadOnly="true" @bind-Value="_project.Priority" Label="Priority" />
             </MudItem>
         </MudGrid>
     </MudPaper>
 
     <MudPaper>
-        <MudDataGrid Items="@project.StepList" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <MudDataGrid Items="@_project.StepList" Filterable="false" SortMode="@SortMode.None" Groupable="false">
             <Columns>
                 <PropertyColumn Property="x => x.Position" />
                 <PropertyColumn Property="x => x.Name" />
                 <PropertyColumn Property="x => x.Description" />
                 <PropertyColumn Property="x => x.DueDate" Title="Due date" />
-                <PropertyColumn Property="x => x.IsCompleted" Title="Creation date" />
+                <PropertyColumn Property="x => x.IsCompleted" Title="Is completed" />
                 <TemplateColumn CellClass="d-flex justify-end">
                     <CellTemplate>
                         <MudStack Row>
@@ -62,12 +62,16 @@
     [Parameter]
     public string ProjectId { get; set; }
 
-    private Project? project;
+    private Project? _project = new Project();
     private int currentCount = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        project = await _projects.GetProjectById(Convert.ToInt32(ProjectId));
+        _project = await _projects.GetProjectById(Convert.ToInt32(ProjectId));
+        if (_project == null)
+        {
+            //TODO MWL Add a check to do something
+        }
     }
 
     private async Task CreateNewStep()
@@ -86,14 +90,14 @@
 
         // if (!result.Canceled)
         // {
-        //     project = await _projects.GetAllProjects();
+        //     _project = await _projects.GetAllProjects();
         // }
     }
 
     // private async void GoToDetail()
     // {
 
-    //         project.Add(new Project
+    //         _project.Add(new Project
     //         {
     //             Name = "TEST"
     //         });

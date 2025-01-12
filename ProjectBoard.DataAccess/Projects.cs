@@ -24,15 +24,21 @@ namespace ProjectBoard.DataAccess
 
         public async Task<Project?> GetProjectById(int projectId)
         {
-            return await _context.Projects.FindAsync(projectId);
+            return await _context.Projects.Include(x => x.StepList).FirstOrDefaultAsync(x => x.Id == projectId);
+        }
+
+        public async Task<List<int>> GetActiveProjectIds()
+        {
+            return await _context.Projects.Where(x=> x.IsActive == false).Select(x => x.Id).ToListAsync();
         }
 
         public async Task AddStepToProject(Step step, int projectId)
         {
             var project = await GetProjectById(projectId);
-            var position = project.StepList.Select(x => x.Position).Max();
+            var position = project.StepList.Select(x => x.Position).Max() + 1;
             step.Position = position;
 
+            project.StepList.Add(step);
             _context.Projects.Update(project);
             await _context.SaveChangesAsync();
         }

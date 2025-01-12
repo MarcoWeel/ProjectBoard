@@ -1,7 +1,22 @@
-﻿@page "/"
+﻿@page "/"\
+@inject Projects _project
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+
+@code
+{
+    private List<int> activeProjects = new List<int>();
+    protected override async Task OnInitializedAsync()
+    {
+        activeProjects.AddRange(await _project.GetActiveProjectIds()); 
+        if (activeProjects.Count == 0)
+        {
+            //TODO MWL Add a check to do something
+        }
+    }
+}

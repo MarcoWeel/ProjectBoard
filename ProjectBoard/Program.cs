@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using ProjectBoard.Components;
@@ -20,6 +21,9 @@ builder.Services.AddEntityFrameworkMySql()
 builder.Services.AddScoped<Projects>();
 
 builder.Services.AddMudServices();
+
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
+
 
 var app = builder.Build();
 
