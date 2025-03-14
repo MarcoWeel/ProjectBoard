@@ -1,22 +1,63 @@
-﻿@page "/"\
-@inject Projects _project
+﻿@page "/"
+@using ProjectBoard.Model
+@using ProjectBoard.Components.SubComponents
+@inject IDialogService DialogService
+@inject Projects _projects
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Active Overview</PageTitle>
 
-<h1>Hello, world!</h1>
+@* <MudButton Size="@Size.Small" OnClick="@CreateNewProject" Variant="@Variant.Filled" Color="@Color.Primary">New project</MudButton> *@
 
-Welcome to your new app.
+<h1>Active projects</h1>
 
+<MudDataGrid Items="@projectList" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Customer" />
+        <PropertyColumn Property="x => x.DueDate" Title="Due date" />
+        <PropertyColumn Property="x => x.CreationDate" Title="Creation date" />
+        <PropertyColumn Property="x => x.Priority" Title="Priotity" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudStack Row>
+                    @* <MudRating Size="@Size.Small" SelectedValue="@context.Item.Rating" /> *@
+                    <MudButton Size="@Size.Small" OnClick="@GoToDetail" Variant="@Variant.Filled" Color="@Color.Primary" href="@($"/ProjectOverview/{context.Item.Id}")">Detail</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
 
-@code
-{
-    private List<int> activeProjects = new List<int>();
+@code {
+
+    private List<Project> projectList;
+    private int currentCount = 0;
+
     protected override async Task OnInitializedAsync()
     {
-        activeProjects.AddRange(await _project.GetActiveProjectIds()); 
-        if (activeProjects.Count == 0)
+        projectList = await _projects.GetActiveProjects();
+    }
+
+    private async Task CreateNewProject()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = false, BackdropClick = false, CloseButton = true };
+
+        var dialog = await DialogService.ShowAsync<CreateProject>("Create new project", options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
         {
-            //TODO MWL Add a check to do something
+            projectList = await _projects.GetActiveProjects();
         }
+    }
+
+    private async void GoToDetail()
+    {
+
+        projectList.Add(new Project
+            {
+                Name = "TEST"
+            });
+
     }
 }

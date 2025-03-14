@@ -13,6 +13,7 @@
 
     <MudPaper Height="75px" Width="100%" Square="true">
         <MudButton Size="@Size.Small" OnClick="@CreateNewStep" Variant="@Variant.Filled" Color="@Color.Primary">New step</MudButton>
+        <MudButton Size="@Size.Small" OnClick="@StartStop" Variant="@Variant.Filled" Color="@Color.Primary">@startStop</MudButton>
     </MudPaper>
 
     <MudPaper Height="75px" Width="100%" Square="true">
@@ -64,6 +65,7 @@
 
     private Project? _project = new Project();
     private int currentCount = 0;
+    private string startStop = "Start";
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,6 +74,19 @@
         {
             //TODO MWL Add a check to do something
         }
+        else
+        {
+            if (_project.IsActive == true)
+            {
+                startStop = "Stop";
+            }
+        }
+
+    }
+
+    private async Task StartStop()
+    {
+
     }
 
     private async Task CreateNewStep()

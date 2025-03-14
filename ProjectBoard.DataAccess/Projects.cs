@@ -27,9 +27,9 @@ namespace ProjectBoard.DataAccess
             return await _context.Projects.Include(x => x.StepList).FirstOrDefaultAsync(x => x.Id == projectId);
         }
 
-        public async Task<List<int>> GetActiveProjectIds()
+        public async Task<List<Project>> GetActiveProjects()
         {
-            return await _context.Projects.Where(x=> x.IsActive == false).Select(x => x.Id).ToListAsync();
+            return await _context.Projects.Where(x=> x.IsActive == true).OrderByDescending(x=>x.DueDate).ToListAsync();
         }
 
         public async Task AddStepToProject(Step step, int projectId)
